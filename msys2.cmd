@@ -89,6 +89,7 @@ echo pacman -S pkg-config --noconfirm
 echo pacman -S yasm --noconfirm
 echo git clone --recursive https://github.com/FFmpeg/FFmpeg.git
 echo cd $HOME/FFmpeg/ ^&^& git clone --recursive https://github.com/mstorsjo/fdk-aac.git
+echo cd $HOME/FFmpeg/fdk-aac ^&^& autoreconf -i ^&^& ./configure ^&^& make
 echo cd $HOME/FFmpeg/ ^&^& git clone --recursive https://github.com/ossrs/librtmp.git
 echo cd $HOME/FFmpeg/ ^&^& ./configure --arch=x86_64 --pkg-config-flags="--static" --enable-gpl --enable-libx264 --enable-libx265 --enable-libmp3lame --enable-version3 --enable-zlib --enable-libvorbis --enable-libtheora --enable-libspeex --enable-libopenjpeg --enable-libgsm --enable-libopus --enable-bzlib --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvpx --enable-libwebp --disable-doc --enable-libass --enable-iconv --enable-libcaca --enable-libgme --enable-cross-compile --enable-nonfree --extra-libs=-lstdc^+^+ --enable-libfdk-aac --enable-runtime-cpudetect --extra-ldflags="--static" --extra-cflags="--static" --enable-static --disable-shared ^&^& make
 )>"%root_path:"=%msys2.txt"
