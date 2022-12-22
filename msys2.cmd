@@ -161,39 +161,6 @@ echo Set objShell = Nothing
 cscript //nologo "%root_path:"=%%~n0.vbs"
 del "%root_path:"=%%~n0.vbs"
 :next_download
-goto :skip_latest_download_link
-:get_latest_download_link
-::Get latest download link of a webpage
-(
-echo $url = "%grab_latest_url:"=%"
-echo $html_tag = "%grab_latest_html_tag:"=%"
-echo $matching_string = "%grab_latest_matching_string:"=%"
-echo foreach^($i in %grab_low_range%..%grab_high_range%^){
-echo $downloadUri = ^(^(Invoke-WebRequest $url -UseBasicParsing -MaximumRedirection 10^).Links ^| Where-Object $html_tag -like $matching_string^)[$i].href
-echo if ^( -not ^([string]::IsNullOrEmpty^($downloadUri^)^) ^) {
-echo $true_variable=%redirect_true_or_false%;
-echo if ^($true_variable^) {
-echo if ^($downloadUri -match "^^/"^) {
-echo $var = [System.Uri]$url
-echo $scheme = $var.Scheme
-echo $domain = $var.Host
-echo $downloadUri = $scheme ^+ "://" ^+ $domain ^+ $downloadUri
-echo }
-echo $downloadURL = $downloadUri
-echo $request = Invoke-WebRequest -Method Head -Uri $downloadURL
-echo $redirectedUri = $request.BaseResponse.ResponseUri.AbsoluteUri
-echo $downloadUri = $redirectedUri
-echo }
-echo Write-Output $downloadUri ^| Out-File "%root_path:"=%%~n0-psoutput.txt"
-echo break;
-echo }
-echo }
-)>"%root_path:"=%%~n0-latest-download.ps1"
-powershell -ExecutionPolicy Unrestricted -File "%root_path:"=%%~n0-latest-download.ps1" "%*" -Verb runAs
-for /f "tokens=*" %%a in ('type "%root_path:"=%%~n0-psoutput.txt"') do set "latest_download_output=%%a"
-del "%root_path:"=%%~n0-latest-download.ps1"
-del "%root_path:"=%%~n0-psoutput.txt"
-:skip_latest_download_link
 
 	if not exist "%~d0\msys64\clang64.exe" (
 		if not defined msys2_exe (
