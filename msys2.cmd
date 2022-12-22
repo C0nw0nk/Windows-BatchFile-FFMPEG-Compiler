@@ -210,72 +210,7 @@ del "%root_path:"=%%~n0-psoutput.txt"
 			del "%root_path:"=%%filename:"=%%fileextension:"=%"
 		)
 	)
-	set PATH=%PATH%;%~d0\msys64\
-	
-	if not exist "%LocalAppData%\bin\NASM" (
-		if not defined nasm_exe (
-			set downloadurl=https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-installer-x64.exe
-			set file_name_to_extract=nasm_installer.exe
-			set delete_download=0
-			set nasm_exe=true
-			::my little trick for redirects and links that dont have a file name i will create one
-			set downloadurl=!downloadurl!^?#/!file_name_to_extract!
-			goto :start_download
-		)
-		if defined nasm_exe (
-			call "%root_path:"=%nasm_installer.exe"
-		)
-	)
-	set PATH=%PATH%;%LocalAppData%\bin\NASM
-	
-	if not exist "%ProgramFiles%\Python39\python.exe" (
-		if not defined python_exe (
-			set downloadurl=https://www.python.org/ftp/python/3.9.9/python-3.9.9-amd64.exe
-			set file_name_to_extract=python64.exe
-			set delete_download=0
-			set python_exe=true
-			::my little trick for redirects and links that dont have a file name i will create one
-			set downloadurl=!downloadurl!^?#/!file_name_to_extract!
-			goto :start_download
-		)
-		if defined python_exe (
-			call "%root_path:"=%%filename:"=%%fileextension:"=%" /quiet TargetDir="%ProgramFiles%\Python39" InstallAllUsers=1 PrependPath=1 AssociateFiles=1 Include_symbols=1 CompileAll=1 Shortcuts=1 Include_launcher=1 Include_test=1 Include_tcltk=1 Include_pip=1 Include_doc=1
-		)
-	)
-	
-	if not exist "%ProgramFiles%\Go\bin\go.exe" (
-		if not defined go_exe (
-			set downloadurl=https://go.dev/dl/go1.19.4.windows-amd64.msi
-			set file_name_to_extract=go64.exe
-			set delete_download=0
-			set go_exe=true
-			::my little trick for redirects and links that dont have a file name i will create one
-			set downloadurl=!downloadurl!^?#/!file_name_to_extract!
-			goto :start_download
-		)
-		if defined go_exe (
-			call "%windir%\%system_folder%\msiexec.exe" /fa "%root_path:"=%%filename:"=%%fileextension:"=%" /qn
-			call "%windir%\%system_folder%\msiexec.exe" /i "%root_path:"=%%filename:"=%%fileextension:"=%" /qn
-			del "%root_path:"=%%filename:"=%%fileextension:"=%"
-		)
-	)
-	
-	if not exist "%~d0\Strawberry\perl\bin\perl.exe" (
-		if not defined perl_exe (
-			set downloadurl=https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-64bit.msi
-			set file_name_to_extract=perl64.exe
-			set delete_download=0
-			set perl_exe=true
-			::my little trick for redirects and links that dont have a file name i will create one
-			set downloadurl=!downloadurl!^?#/!file_name_to_extract!
-			goto :start_download
-		)
-		if defined perl_exe (
-			call "%windir%\%system_folder%\msiexec.exe" /fa "%root_path:"=%%filename:"=%%fileextension:"=%" /qn
-			call "%windir%\%system_folder%\msiexec.exe" /i "%root_path:"=%%filename:"=%%fileextension:"=%" /qn
-			del "%root_path:"=%%filename:"=%%fileextension:"=%"
-		)
-	)	
+	set PATH=%PATH%;%~d0\msys64\	
 
 goto :start_exe
 :end_script
