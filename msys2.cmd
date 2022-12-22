@@ -90,7 +90,7 @@ echo cd $HOME/ffmpeg-windows-build-helpers ^&^& bash cross_compile_ffmpeg.sh ^&^
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
-	for /f "delims=" %%x in ('%~d0\msys64\usr\bin\env.exe MSYSTEM^=MINGW64 /usr/bin/bash -lc "%%a"') do (
+	for /f "delims=" %%x in ('%~d0\msys64\usr\bin\env.exe MSYSTEM^=MSYS2 /usr/bin/bash -lc "%%a"') do (
 		for /f "delims=" %%t in ("%%x") do (
 			set console=%%t
 			echo !console!
@@ -99,8 +99,8 @@ for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
 	echo(^ )
 )
 del "%root_path:"=%msys2.txt"
-echo Compiled to Directory : "%~d0\msys64\home\%USERNAME%\FFmpeg"
-start "" "%~d0\msys64\home\%USERNAME%\FFmpeg"
+echo Compiled to Directory : "%~d0\msys64\home\%USERNAME%\ffmpeg-windows-build-helpers\sandbox"
+start "" "%~d0\msys64\home\%USERNAME%\ffmpeg-windows-build-helpers\sandbox"
 
 goto :end_script
 
