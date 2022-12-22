@@ -75,10 +75,7 @@ goto :settings_load
 
 (
 echo pacman -V
-echo pacman -S mingw-w64-ucrt-x86_64-gcc --noconfirm
-echo pacman -S mingw-w64-i686-gcc --noconfirm
-echo pacman -S mingw-w64-x86_64-gcc --noconfirm
-echo pacman -S mingw-w64-x86_64-ffmpeg --noconfirm
+echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel mingw-w64-x86_64-python3 mingw-w64-x86_64-meson
 echo pacman -S git --noconfirm
 echo pacman -S autoconf --noconfirm
 echo pacman -S automake --noconfirm
@@ -87,11 +84,8 @@ echo pacman -S make --noconfirm
 echo pacman -S diffutils --noconfirm
 echo pacman -S pkg-config --noconfirm
 echo pacman -S yasm --noconfirm
-echo git clone --recursive https://github.com/FFmpeg/FFmpeg.git
-echo cd $HOME/FFmpeg/ ^&^& git clone --recursive https://github.com/mstorsjo/fdk-aac.git
-echo cd $HOME/FFmpeg/fdk-aac ^&^& autoreconf -i ^&^& ./configure ^&^& make
-echo cd $HOME/FFmpeg/ ^&^& git clone --recursive https://github.com/ossrs/librtmp.git
-echo cd $HOME/FFmpeg/ ^&^& ./configure --arch=x86_64 --pkg-config-flags="--static" --enable-gpl --enable-libx264 --enable-libx265 --enable-libmp3lame --enable-version3 --enable-zlib --enable-libvorbis --enable-libtheora --enable-libspeex --enable-libopenjpeg --enable-libgsm --enable-libopus --enable-bzlib --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvpx --enable-libwebp --disable-doc --enable-libass --enable-iconv --enable-libcaca --enable-libgme --enable-cross-compile --enable-nonfree --extra-libs=-lstdc^+^+ --enable-libfdk-aac --enable-runtime-cpudetect --extra-ldflags="--static" --extra-cflags="--static" --enable-static --disable-shared ^&^& make
+echo cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git
+echo cd $HOME/ffmpeg-windows-build-helpers ^&^& bash cross_compile_ffmpeg.sh ^&^& echo 3
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
