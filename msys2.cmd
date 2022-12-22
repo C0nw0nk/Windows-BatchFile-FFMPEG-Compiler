@@ -75,7 +75,7 @@ goto :settings_load
 
 (
 echo pacman -V
-echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel mingw-w64-x86_64-python3 mingw-w64-x86_64-meson
+echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --noconfirm
 echo pacman -S git --noconfirm
 echo pacman -S autoconf --noconfirm
 echo pacman -S automake --noconfirm
