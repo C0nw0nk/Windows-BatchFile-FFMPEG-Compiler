@@ -84,7 +84,7 @@ echo pacman -S make --noconfirm
 echo pacman -S diffutils --noconfirm
 echo pacman -S pkg-config --noconfirm
 echo pacman -S yasm --noconfirm
-echo wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS="$CXXFLAGS -std=gnu^+^+98" ^&^& make ^&^& make install
+echo wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS="$CXXFLAGS -std=gnu^+^+98" ^&^& make -j$^(nproc^) ^&^& make install
 echo cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git
 echo cd $HOME/ffmpeg-windows-build-helpers ^&^& bash cross_compile_ffmpeg.sh ^&^& echo 3
 )>"%root_path:"=%msys2.txt"
