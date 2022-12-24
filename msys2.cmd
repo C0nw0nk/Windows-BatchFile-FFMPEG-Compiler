@@ -88,6 +88,9 @@ echo export LD_LIBRARY_PATH=/clang32/lib:/clang64/lib:/clangarm64/lib:/ucrt64/li
 echo export PKG_CONFIG_PATH=/clang32/lib/pkgconfig:/clang64/lib/pkgconfig:/clangarm64/lib/pkgconfig:/ucrt64/lib/pkgconfig:/mingw32/lib/pkgconfig:/mingw64/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/share/lib/pkgconfig:$PKG_CONFIG_PATH
 echo FT2_CFLAGS=$^(pkg-config --cflags freetype2^)
 echo FT2_LIBS=$^(pkg-config --libs freetype2^)
+echo export MSYS2_ARG_CONV_EXCL=^"^*^"
+echo export MSYS_NO_PATHCONV=1
+echo export PATH=/usr/bin:/mingw64/bin:/mingw32/bin:/clangarm64/bin:/clang64/bin:/clang32/bin:$PATH
 )>"%root_path:"=%msys2_vars.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2_vars.txt) do (
@@ -102,10 +105,10 @@ del "%root_path:"=%msys2_vars.txt"
 ::End build vars
 
 (
-echo pacman -V
+echo pacman -V ^&^& !msys_variables! ^&^& echo $PATH
 echo pacman -Su ^&^& echo y
-echo pacman -S gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --noconfirm
-echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --noconfirm
+echo pacman -S gcc gcc-fortran gcc-libs mingw-w64-i686-gcc gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --noconfirm
+echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel python mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --noconfirm
 echo pacman -S base-devel gcc vim cmake --noconfirm
 echo pacman -S mingw-w64-x86_64-gnome-common --noconfirm
 echo pacman -S mingw-w64-x86_64-htslib --noconfirm
@@ -124,7 +127,8 @@ echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash q
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
-	for /f "delims=" %%x in ('%~d0\msys64\usr\bin\env.exe MSYSTEM^=MSYS2 /usr/bin/bash -lc "%%a"') do (
+	set MSYSTEM=MSYS
+	for /f "delims=" %%x in ('%~d0\msys64\usr\bin\env.exe MSYSTEM^=MSYS /usr/bin/bash -lc "%%a"') do (
 		for /f "delims=" %%t in ("%%x") do (
 			set console=%%t
 			echo !console!
@@ -211,7 +215,7 @@ del "%root_path:"=%%~n0.vbs"
 			del "%root_path:"=%%filename:"=%%fileextension:"=%"
 		)
 	)
-	set PATH=%PATH%;%~d0\msys64\	
+	set PATH=%PATH%;%~d0\msys64\;%~d0\msys64\usr\bin;%~d0\msys64\mingw64\bin;%~d0\msys64\mingw32\bin;%~d0\msys64\clangarm64\bin;%~d0\msys64\clang64\bin;%~d0\msys64\clang32\bin
 
 goto :start_exe
 :end_script
