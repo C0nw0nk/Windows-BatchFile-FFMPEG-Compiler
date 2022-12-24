@@ -23,6 +23,15 @@
 :: Script Settings
 :settings_load
 
+:: FFMPEG build type to compile
+:: 1. Both Win32 and Win64
+:: 2. Win32 (32-bit only)
+:: 3. Win64 (64-bit only)
+:: 4. Local native
+set ffmpeg_arch=3
+
+set ffmpeg_folder_name=ffmpeg
+
 ::instead of just closing the window after our automated web tasking we pause to view and check once your happy you can set this to 0
 :: 1 enabled
 :: 0 disabled
@@ -75,6 +84,8 @@ goto :settings_load
 
 (
 echo pacman -V
+echo pacman -Su ^&^& echo y
+echo pacman -S mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --noconfirm
 echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --noconfirm
 echo pacman -S base-devel gcc vim cmake --noconfirm
 echo pacman -S git --noconfirm
@@ -83,12 +94,12 @@ echo pacman -S automake --noconfirm
 echo pacman -S libtool --noconfirm
 echo pacman -S make --noconfirm
 echo pacman -S diffutils --noconfirm
-echo pacman -S pkg-config --noconfirm
-echo pacman -S yasm --noconfirm
-echo wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS="$CXXFLAGS -std=gnu^+^+98" ^&^& make -j$^(nproc^) ^&^& make install
-echo cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git
-echo cd $HOME/ffmpeg-windows-build-helpers ^&^& bash cross_compile_ffmpeg.sh -a ^&^& echo 3
-echo cd $HOME/ffmpeg-windows-build-helpers/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
+echo pacman -S pkgconfig --noconfirm
+echo pacman -S yasm nasm --noconfirm
+echo wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS=^"$CXXFLAGS -std=gnu^+^+98^" ^&^& make -j$^(nproc^) ^&^& make install
+echo cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git %ffmpeg_folder_name%
+echo cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh -a ^&^& echo %ffmpeg_arch%
+echo cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
@@ -101,8 +112,8 @@ for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
 	echo(^ )
 )
 del "%root_path:"=%msys2.txt"
-echo Compiled to Directory : "%~d0\msys64\home\%USERNAME%\ffmpeg-windows-build-helpers\sandbox"
-start "" "%~d0\msys64\home\%USERNAME%\ffmpeg-windows-build-helpers\sandbox"
+echo Compiled to Directory : "%~d0\msys64\home\%USERNAME%\%ffmpeg_folder_name%\sandbox"
+start "" "%~d0\msys64\home\%USERNAME%\%ffmpeg_folder_name%\sandbox"
 
 goto :end_script
 
