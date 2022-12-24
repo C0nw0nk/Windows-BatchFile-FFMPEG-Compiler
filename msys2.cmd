@@ -82,6 +82,25 @@ goto :settings_load
 )
 ::stuff
 
+::Build file paths for msys2 to use for its libraries includes and compilers
+(
+echo export LD_LIBRARY_PATH=/clang32/lib:/clang64/lib:/clangarm64/lib:/ucrt64/lib:/mingw32/lib:/mingw64/lib:/usr/local/lib:/usr/share/lib:$LD_LIBRARY_PATH
+echo export PKG_CONFIG_PATH=/clang32/lib/pkgconfig:/clang64/lib/pkgconfig:/clangarm64/lib/pkgconfig:/ucrt64/lib/pkgconfig:/mingw32/lib/pkgconfig:/mingw64/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/share/lib/pkgconfig:$PKG_CONFIG_PATH
+echo FT2_CFLAGS=$^(pkg-config --cflags freetype2^)
+echo FT2_LIBS=$^(pkg-config --libs freetype2^)
+)>"%root_path:"=%msys2_vars.txt"
+:: MSYS2 can't print to windows cmd so i made a way it can
+for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2_vars.txt) do (
+	if not defined msys_variables (
+		set msys_variables=%%a
+	) else (
+		set msys_variables=!msys_variables! ^&^& %%a
+	)
+)
+echo !msys_variables!
+del "%root_path:"=%msys2_vars.txt"
+::End build vars
+
 (
 echo pacman -V
 echo pacman -Su ^&^& echo y
@@ -98,10 +117,10 @@ echo pacman -S make --noconfirm
 echo pacman -S diffutils --noconfirm
 echo pacman -S pkgconfig --noconfirm
 echo pacman -S yasm nasm --noconfirm
-echo wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS=^"$CXXFLAGS -std=gnu^+^+98^" ^&^& make -j$^(nproc^) ^&^& make install
-echo cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git %ffmpeg_folder_name%
-echo cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh -a ^&^& echo %ffmpeg_arch%
-echo cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
+echo !msys_variables! ^&^& wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS=^"$CXXFLAGS -std=gnu^+^+98^" ^&^& make -j$^(nproc^) ^&^& make install
+echo !msys_variables! ^&^& cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git %ffmpeg_folder_name%
+echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh -a ^&^& echo %ffmpeg_arch%
+echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
