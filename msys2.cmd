@@ -32,6 +32,8 @@ set ffmpeg_arch=3
 
 set ffmpeg_folder_name=ffmpeg
 
+set quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64=0
+
 ::instead of just closing the window after our automated web tasking we pause to view and check once your happy you can set this to 0
 :: 1 enabled
 :: 0 disabled
@@ -90,7 +92,7 @@ echo FT2_CFLAGS=$^(pkg-config --cflags freetype2^)
 echo FT2_LIBS=$^(pkg-config --libs freetype2^)
 echo export MSYS2_ARG_CONV_EXCL=^"^*^"
 echo export MSYS_NO_PATHCONV=1
-echo export PATH=/usr/bin:/mingw64/bin:/mingw32/bin:/clangarm64/bin:/clang64/bin:/clang32/bin:$PATH
+echo export PATH=$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-i686/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-i686/i686-w64-mingw32/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-x86_64/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-x86_64/x86_64-w64-mingw32/bin:/usr/bin:/mingw64/bin:/mingw32/bin:/clangarm64/bin:/clang64/bin:/clang32/bin:$PATH
 )>"%root_path:"=%msys2_vars.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2_vars.txt) do (
@@ -123,7 +125,7 @@ echo pacman -S yasm nasm --noconfirm
 echo !msys_variables! ^&^& wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS=^"$CXXFLAGS -std=gnu^+^+98^" ^&^& make -j$^(nproc^) ^&^& make install
 echo !msys_variables! ^&^& cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git %ffmpeg_folder_name%
 echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh -a ^&^& echo %ffmpeg_arch%
-echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
+if %quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64% == 1 echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2.txt) do (
