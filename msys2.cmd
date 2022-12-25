@@ -108,20 +108,20 @@ del "%root_path:"=%msys2_vars.txt"
 
 (
 echo pacman -V ^&^& !msys_variables! ^&^& echo $PATH
-echo pacman -Su ^&^& echo y
-echo pacman -S gcc gcc-fortran gcc-libs mingw-w64-i686-gcc gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --noconfirm
-echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel python mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --noconfirm
-echo pacman -S base-devel gcc vim cmake --noconfirm
-echo pacman -S mingw-w64-x86_64-gnome-common --noconfirm
-echo pacman -S mingw-w64-x86_64-htslib --noconfirm
-echo pacman -S git --noconfirm
-echo pacman -S autoconf --noconfirm
-echo pacman -S automake --noconfirm
-echo pacman -S libtool --noconfirm
-echo pacman -S make --noconfirm
-echo pacman -S diffutils --noconfirm
-echo pacman -S pkgconfig --noconfirm
-echo pacman -S yasm nasm --noconfirm
+echo pacman -Su --needed ^&^& echo y
+echo pacman -S gcc gcc-fortran gcc-libs mingw-w64-i686-gcc gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --needed --noconfirm
+echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel python mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --needed --noconfirm
+echo pacman -S base-devel gcc vim cmake --needed --noconfirm
+echo pacman -S mingw-w64-x86_64-gnome-common --needed --noconfirm
+echo pacman -S mingw-w64-x86_64-htslib --needed --noconfirm
+echo pacman -S git --needed --noconfirm
+echo pacman -S autoconf --needed --noconfirm
+echo pacman -S automake --needed --noconfirm
+echo pacman -S libtool --needed --noconfirm
+echo pacman -S make --needed --noconfirm
+echo pacman -S diffutils --needed --noconfirm
+echo pacman -S pkgconfig --needed --noconfirm
+echo pacman -S yasm nasm --needed --noconfirm
 echo !msys_variables! ^&^& wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS=^"$CXXFLAGS -std=gnu^+^+98^" ^&^& make -j$^(nproc^) ^&^& make install
 echo !msys_variables! ^&^& cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git %ffmpeg_folder_name%
 echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh --build-intel-qsv=y --disable-nonfree=y --compiler-flavors=win64 ^&^& echo %ffmpeg_arch%
