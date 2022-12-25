@@ -106,7 +106,28 @@ echo !msys_variables!
 del "%root_path:"=%msys2_vars.txt"
 ::End build vars
 
+::Get march
 (
+echo gcc -march=native -Q --help=target ^| grep march ^| tr -d '\n'
+)>"%root_path:"=%msys2_march.txt"
+:: MSYS2 can't print to windows cmd so i made a way it can
+for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2_march.txt) do (
+	set MSYSTEM=MSYS
+	for /f "delims=" %%x in ('%~d0\msys64\usr\bin\env.exe MSYSTEM^=MSYS /usr/bin/bash -lc "%%a"') do (
+		for /f "delims=" %%t in ("%%x") do (
+			set console=%%t
+			set gcc_march_value=!console:~32,-43!
+			echo !console!
+		)
+	)
+	echo(^ )
+)
+del "%root_path:"=%msys2_march.txt"
+set "gcc_march_value=%gcc_march_value: =%"
+::End get march
+
+(
+echo gcc -march=native -Q --help=target ^| grep march
 echo pacman -V ^&^& !msys_variables! ^&^& echo $PATH
 echo pacman -Su --needed ^&^& echo y
 echo pacman -S gcc gcc-fortran gcc-libs mingw-w64-i686-gcc gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --needed --noconfirm
@@ -124,7 +145,7 @@ echo pacman -S pkgconfig --needed --noconfirm
 echo pacman -S yasm nasm --needed --noconfirm
 echo !msys_variables! ^&^& wget http://www.colm.net/files/ragel/ragel-6.9.tar.gz ^&^& tar -zxvf ragel-6.9.tar.gz ^&^& cd $HOME/ragel-6.9 ^&^& ./configure --prefix=/usr CXXFLAGS=^"$CXXFLAGS -std=gnu^+^+98^" ^&^& make -j$^(nproc^) ^&^& make install
 echo !msys_variables! ^&^& cd $HOME ^&^& git clone --recursive https://github.com/rdp/ffmpeg-windows-build-helpers.git %ffmpeg_folder_name%
-echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh --build-intel-qsv=y --disable-nonfree=y --compiler-flavors=win64 ^&^& echo %ffmpeg_arch%
+echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name% ^&^& bash cross_compile_ffmpeg.sh --build-intel-qsv=y --disable-nonfree=y --compiler-flavors=win64 --cflags=-march=%gcc_march_value% ^&^& echo %ffmpeg_arch%
 if %quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64% == 1 echo !msys_variables! ^&^& cd $HOME/%ffmpeg_folder_name%/quick_build ^&^& bash quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64.sh
 )>"%root_path:"=%msys2.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
