@@ -32,7 +32,29 @@ set ffmpeg_arch=3
 
 set ffmpeg_folder_name=ffmpeg
 
+:: 1 enabled
+:: 0 disabled
 set quick_cross_compile_ffmpeg_fdk_aac_and_x264_using_packaged_mingw64=0
+
+::mingw32 | -mingw64 | -ucrt64 | -clang64 | -msys
+::set MSYSTEM=MSYS
+::set MSYSTEM=MINGW32
+::set MSYSTEM=MINGW64
+::set MSYSTEM=UCRT64
+::set MSYSTEM=CLANG64
+::set MSYSTEM=CLANG32
+::set MSYSTEM=CLANGARM64
+
+set MSYS2_NOSTART=yes
+set MSYS2_PATH_TYPE=inherit
+set CHERE_INVOKING=enabled_from_arguments
+
+:: https://conemu.github.io/
+::set MSYSCON=conemu.exe
+::conemu64.exe
+::set shell_type=bash.exe
+::set shell_type=mintty.exe
+::set shell_type=env.exe
 
 ::instead of just closing the window after our automated web tasking we pause to view and check once your happy you can set this to 0
 :: 1 enabled
@@ -92,7 +114,9 @@ echo FT2_CFLAGS=$^(pkg-config --cflags freetype2^)
 echo FT2_LIBS=$^(pkg-config --libs freetype2^)
 echo export MSYS2_ARG_CONV_EXCL=^"^*^"
 echo export MSYS_NO_PATHCONV=1
-echo export PATH=$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-i686/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-i686/i686-w64-mingw32/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-x86_64/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-x86_64/x86_64-w64-mingw32/bin:/usr/bin:/mingw64/bin:/mingw32/bin:/clangarm64/bin:/clang64/bin:/clang32/bin:$PATH
+echo export PATH=$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-i686/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-i686/i686-w64-mingw32/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-x86_64/bin:$HOME/%ffmpeg_folder_name%/sandbox/cross_compilers/mingw-w64-x86_64/x86_64-w64-mingw32/bin:/usr/bin:/mingw64/bin:/mingw32/bin:/clangarm64/bin:/clang64/bin:/clang32/bin:/mingw64/share:$PATH
+echo export XDG_DATA_HOME=/mingw64/share
+echo export XDG_DATA_DIRS=/mingw64/share
 )>"%root_path:"=%msys2_vars.txt"
 :: MSYS2 can't print to windows cmd so i made a way it can
 for /f "usebackq tokens=*" %%a in (%root_path:"=%msys2_vars.txt) do (
@@ -130,7 +154,12 @@ set "gcc_march_value=%gcc_march_value: =%"
 echo gcc -march=native -Q --help=target ^| grep march
 echo pacman -V ^&^& !msys_variables! ^&^& echo $PATH
 echo pacman -Su --needed ^&^& echo y
-echo pacman -S gcc gcc-fortran gcc-libs mingw-w64-i686-gcc gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --needed --noconfirm
+echo pacman -S python-pip --needed --noconfirm
+echo python -m pip install docwriter
+echo pip install vharfbuzz
+echo pacman -S mingw-w64-x86_64-arm-none-eabi-toolchain mingw-w64-x86_64-avr-toolchain mingw-w64-x86_64-eda mingw-w64-x86_64-kde-applications mingw-w64-x86_64-kde-education mingw-w64-x86_64-kde-graphics mingw-w64-x86_64-kde-utilities mingw-w64-x86_64-kdesdk mingw-w64-x86_64-kf5 mingw-w64-x86_64-perl-modules mingw-w64-x86_64-qt-static mingw-w64-x86_64-qt5 mingw-w64-x86_64-qt5-debug mingw-w64-x86_64-qt5-static mingw-w64-x86_64-qt6 mingw-w64-x86_64-qt6-debug mingw-w64-x86_64-riscv64-unknown-elf-toolchain mingw-w64-x86_64-texlive-full mingw-w64-x86_64-texlive-scheme-basic mingw-w64-x86_64-texlive-scheme-context mingw-w64-x86_64-texlive-scheme-full mingw-w64-x86_64-texlive-scheme-gust mingw-w64-x86_64-texlive-scheme-medium mingw-w64-x86_64-texlive-scheme-small mingw-w64-x86_64-texlive-scheme-tetex mingw-w64-x86_64-toolchain mingw-w64-x86_64-vulkan-devel net-utils perl-modules python-modules sys-utils tesseract-data utilities VCS vim-plugins --needed --noconfirm
+echo pacman -S mingw-w64-clang-x86_64-vulkan-devel mingw-w64-x86_64-chafa perl-modules python-modules mingw-w64-x86_64-toolchain perl-devel perl-doc python-brotli --needed --noconfirm
+echo pacman -S perl-Compress-Bzip2 mingw-w64-x86_64-python-brotli brotli-devel glib2-devel setconf mingw-w64-x86_64-SDL2 libbz2-devel mingw-w64-cross-zlib mingw-w64-clang-i686-libc^+^+ mingw-w64-x86_64-libc^+^+ mingw-w64-x86_64-lld mingw-w64-clang-i686-xavs mingw-w64-clang-x86_64-xavs mingw-w64-i686-xavs mingw-w64-x86_64-xavs mingw-w64-ucrt-x86_64-xavs gcc gcc-fortran gcc-libs mingw-w64-i686-gcc gengetopt mingw-w64-x86_64-globjects mingw-w64-x86_64-gtkada mingw-w64-x86_64-gcc-ada mingw-w64-cross-gcc mingw-w64-x86_64-dlfcn mingw-w64-x86_64-freetype mingw-w64-x86_64-mpg123 mingw-w64-x86_64-gst-plugins-good mingw-w64-ucrt-x86_64-opencv mingw-w64-x86_64-libsamplerate --needed --noconfirm
 echo pacman -S mercurial texinfo autogen cmake gperf nasm patch unzip pax ed bison flex cvs svn clang meson mingw-w64-x86_64-ragel python mingw-w64-x86_64-python3 mingw-w64-x86_64-meson --needed --noconfirm
 echo pacman -S base-devel gcc vim cmake --needed --noconfirm
 echo pacman -S mingw-w64-x86_64-gnome-common --needed --noconfirm
@@ -225,7 +254,7 @@ del "%root_path:"=%%~n0.vbs"
 
 	if not exist "%~d0\msys64\clang64.exe" (
 		if not defined msys2_exe (
-			set downloadurl=https://github.com/msys2/msys2-installer/releases/download/2022-12-16/msys2-x86_64-20221216.exe
+			set downloadurl=https://github.com/msys2/msys2-installer/releases/download/nightly-x86_64/msys2-x86_64-latest.exe
 			set file_name_to_extract=msys2.exe
 			set delete_download=0
 			set msys2_exe=true
