@@ -242,9 +242,9 @@ echo End Sub
 echo If instr^(ZipFile, "zip"^) ^> 0 Then
 echo ExtractByExtension app.NameSpace^(ZipFile^), "exe", ExtractTo
 echo End If
-if %file_name_to_extract% == * echo set FilesInZip = app.NameSpace^(ZipFile^).items
-if %file_name_to_extract% == * echo app.NameSpace^(ExtractTo^).CopyHere FilesInZip, 4
-if %delete_download% == 1 echo fso.DeleteFile ZipFile
+if [%file_name_to_extract%]==[*] echo set FilesInZip = app.NameSpace^(ZipFile^).items
+if [%file_name_to_extract%]==[*] echo app.NameSpace^(ExtractTo^).CopyHere FilesInZip, 4
+if [%delete_download%]==[1] echo fso.DeleteFile ZipFile
 echo Set fso = Nothing
 echo Set objShell = Nothing
 )>"%root_path:"=%%~n0.vbs"
